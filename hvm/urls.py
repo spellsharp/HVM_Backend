@@ -9,6 +9,6 @@ router.register(r'accompanying', AccompanyingViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('getAccompanyingVisitors/', getAccompanyingVisitors, name='getAccompanyingVisitors'),
-    path('getLeadVisitors/', getLeadVisitors, name='getLeadVisitors')
+    path('getLeadVisitors/', getLeadVisitors, name='getLeadVisitors'),
     path('status/', is_expired, name='is_expired'),
 ]
