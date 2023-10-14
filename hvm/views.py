@@ -51,11 +51,17 @@ def getAccompanyingVisitors(request):
 def getLeadVisitors(request):
     if request.method == 'GET':
         unique_id = request.GET.get('unique_id', '')
-        lead_id = request.GET.get('lead_id', '')        
+        lead_id = request.GET.get('lead_id', '')      
+        from_date, to_date = request.GET.get('from_date', ''), request.GET.get('to_date', '')  
+        date = request.GET.get('date', '')
         if unique_id:
             lead_visitors = LeadVisitor.objects.filter(unique_id=unique_id)
         elif lead_id:
             lead_visitors = LeadVisitor.objects.filter(id=lead_id)
+        elif date:
+            lead_visitors = LeadVisitor.objects.filter(visiting_date=date)
+        elif from_date and to_date:
+            lead_visitors = LeadVisitor.objects.filter(visiting_date__range=[from_date, to_date])
         else:
             lead_visitors = LeadVisitor.objects.all()
         serializer = LeadVisitorSerializer(lead_visitors, many=True)
