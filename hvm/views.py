@@ -67,11 +67,11 @@ def is_expired(request):
         unique_id = request.GET.get('unique_id', '')
         lead_visitor = LeadVisitor.objects.filter(unique_id=unique_id).first()
         if lead_visitor:
-            print(lead_visitor.valid_till)
-            print(datetime.datetime.now())
             if lead_visitor.valid_till.replace(tzinfo=None) < datetime.datetime.now():
+                print(f"Expired: ID {unique_id}")
                 return JsonResponse({'message': 'expired'})
             else:
+                print(f"Not Expired: ID {unique_id}")
                 return JsonResponse({'message': 'not expired'})
         else:
             return JsonResponse({'message': 'not found'})
