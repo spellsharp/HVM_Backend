@@ -67,8 +67,8 @@ def is_expired(request):
         unique_id = request.GET.get('unique_id', '')
         lead_visitor = LeadVisitor.objects.filter(unique_id=unique_id).first()
         if lead_visitor:
-            print(lead_visitor.valid_till) #2023-10-14 23:37:15.561043+00:00
-            print(datetime.datetime.now()) #2023-10-14 17:38:35.502231
+            print(lead_visitor.valid_till)
+            print(datetime.datetime.now())
             if lead_visitor.valid_till.replace(tzinfo=None) < datetime.datetime.now():
                 return JsonResponse({'message': 'expired'})
             else:
