@@ -11,9 +11,9 @@ class LeadVisitorAdmin(admin.ModelAdmin):
 
 
 class AccompanyingAdmin(admin.ModelAdmin):
-    list_display = ('full_name', 'lead_visitor', 'company_name', 'address', 'contact_number', 'image')
-    list_filter = ('full_name', 'lead_visitor', 'company_name', 'address', 'contact_number', 'image')
-    search_fields = ('full_name', 'lead_visitor', 'company_name', 'address', 'contact_number', 'image')
+    list_display = ('full_name', 'lead_visitor','contact_number')
+    list_filter = ('full_name', 'lead_visitor','contact_number')
+    search_fields = ('full_name', 'lead_visitor','contact_number')
 
 
 admin.site.register(LeadVisitor, LeadVisitorAdmin)
