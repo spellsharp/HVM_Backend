@@ -1,4 +1,4 @@
-import uuid
+import uuid, datetime
 from django.db import models
 
 class LeadVisitor(models.Model):
@@ -10,7 +10,7 @@ class LeadVisitor(models.Model):
     visiting_date = models.DateField("Visiting Date", null=True, blank=True)
     visiting_time = models.TimeField("Visiting Time", null=True, blank=True)    
     unique_id = models.CharField(max_length=36, default=uuid.uuid4)
-
+    valid_till = visiting_time + datetime.timedelta(hours=6)
     def __str__(self):
         return self.full_name + " | " + self.unique_id
 

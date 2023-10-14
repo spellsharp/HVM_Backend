@@ -1,11 +1,7 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import render
-from rest_framework.response import Response
-
-# Create your views here.
 from .models import LeadVisitor, Accompanying
-
+import datetime
 from rest_framework import viewsets
 from .serializers import LeadVisitorSerializer, AccompanyingSerializer
 
@@ -42,9 +38,7 @@ def getAccompanyingVisitors(request):
         else:
             return JsonResponse({'message': 'Accompanying Visitor not found'})
 
-    return JsonResponse({'message': 'Visitor not found'})
-            
-        
+    return JsonResponse({'message': 'Visitor not found'})    
         
 
 @csrf_exempt
@@ -66,3 +60,16 @@ def getLeadVisitors(request):
             lead_visitors = LeadVisitor.objects.all()
         serializer = LeadVisitorSerializer(lead_visitors, many=True)
         return JsonResponse(serializer.data, safe=False)
+
+@csrf_exempt
+def is_expired(request):
+    if request.method == 'GET':
+        unique_id = request.GET.get('unique_id', '')
+        lead_visitor = LeadVisitor.objects.filter(unique_id=unique_id).first()
+        if lead_visitor:
+            if lead_visitor.valid_till < datetime.datetime.now():
+                return JsonResponse({'message': 'expired'})
+            else:
+                return JsonResponse({'message': 'not expired'})
+        else:
+            return JsonResponse({'message': 'not found'})

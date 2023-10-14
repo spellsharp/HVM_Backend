@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import LeadVisitorViewSet, AccompanyingViewSet, getAccompanyingVisitors, getLeadVisitors
+from .views import LeadVisitorViewSet, AccompanyingViewSet, getAccompanyingVisitors, getLeadVisitors, is_expired
 
 router = DefaultRouter()
 router.register(r'leadvisitor', LeadVisitorViewSet)
@@ -10,4 +10,5 @@ urlpatterns = [
     path('', include(router.urls)),
     path('getAccompanyingVisitors/', getAccompanyingVisitors, name='getAccompanyingVisitors'),
     path('getLeadVisitors/', getLeadVisitors, name='getLeadVisitors')
+    path('status/', is_expired, name='is_expired'),
 ]
