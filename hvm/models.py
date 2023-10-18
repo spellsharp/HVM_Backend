@@ -24,7 +24,6 @@ class LeadVisitor(models.Model):
     def save(self, *args, **kwargs):
         if self.visiting_time:
             self.valid_till = datetime.datetime.combine(datetime.date.today(), self.visiting_time) + datetime.timedelta(hours=6)
-
         super().save(*args, **kwargs)
 
     def __str__(self):
