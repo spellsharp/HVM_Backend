@@ -1,7 +1,16 @@
 import uuid, datetime
 from django.db import models
+from django.contrib.auth.models import User 
 
+class Receiver(models.Model):
+    username = models.CharField(max_length=200)
+    full_name = models.CharField(max_length=200)
+    employee_id = models.CharField(max_length=200, null=True, blank=True)
+    def __str__(self):
+        return self.username + " | " + self.full_name
+    
 class LeadVisitor(models.Model):
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='lead_visitors', null=True, blank=True)
     full_name = models.CharField(max_length=200)
     company_name = models.CharField(max_length=200)
     address = models.CharField(max_length=200)
@@ -22,6 +31,7 @@ class LeadVisitor(models.Model):
         return self.full_name + " | " + self.unique_id
 
 class Accompanying(models.Model):
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='accompanying_visitors', null=True, blank=True)
     lead_visitor = models.ForeignKey(LeadVisitor, on_delete=models.CASCADE, null=True)
     full_name = models.CharField(max_length=200)
     contact_number = models.CharField(max_length=200)
