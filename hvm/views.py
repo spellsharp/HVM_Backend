@@ -43,26 +43,7 @@ class LogoutView(APIView):
             return Response(status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        
-# @csrf_exempt
-# def create_lead_visitor(request):
-#     if request.method == 'POST':
-#         logged_in_user = request.user
-#         lead_visitor = LeadVisitor(
-#             full_name=request.data['full_name'], 
-#             company_name=request.data['company_name'],
-#             address=request.data['address'],
-#             contact_number=request.data['contact_number'],
-#             image=request.data['image'],
-#             visiting_date=request.data['visiting_date'],
-#             visiting_time=request.data['visiting_time'],
-#             created_by=logged_in_user,  
-#         )
-#         lead_visitor.save()
 
-#         print(f'User {logged_in_user.username} created a new LeadVisitor instance.')
-
-        
 @csrf_exempt
 def getAccompanyingVisitors(request):
     if request.method == 'GET':
