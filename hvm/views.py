@@ -2,16 +2,42 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import LeadVisitor, Accompanying
 import datetime
-from rest_framework import viewsets
+from rest_framework import viewsets, status
 from .serializers import LeadVisitorSerializer, AccompanyingSerializer
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.permissions import AllowAny
+from .serializers import MyTokenObtainPairSerializer
+from rest_framework.views import APIView
+from rest_framework.response import Response
+
+class MyObtainTokenPairView(TokenObtainPairView):
+    permission_classes = (AllowAny,)
+    serializer_class = MyTokenObtainPairSerializer
 
 class LeadVisitorViewSet(viewsets.ModelViewSet):
     queryset = LeadVisitor.objects.all()
     serializer_class = LeadVisitorSerializer
+    permission_classes = [IsAuthenticated]
 class AccompanyingViewSet(viewsets.ModelViewSet):
     queryset = Accompanying.objects.all()
     serializer_class = AccompanyingSerializer
+    permission_classes = [IsAuthenticated]
+    
 
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self, request):
+        try:
+            print(dict(request.data))
+            refresh_token = request.data['refresh_token']
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            return Response(status=status.HTTP_205_RESET_CONTENT)
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
 @csrf_exempt
 def getAccompanyingVisitors(request):
     if request.method == 'GET':
