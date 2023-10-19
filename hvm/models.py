@@ -6,6 +6,8 @@ class Receiver(models.Model):
     username = models.CharField(max_length=200)
     full_name = models.CharField(max_length=200)
     employee_id = models.CharField(max_length=200, null=True, blank=True)
+    contact_number = models.CharField(max_length=200, null=True, blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='receivers', null=True, blank=True)
     def __str__(self):
         return self.username + " | " + self.full_name
     
