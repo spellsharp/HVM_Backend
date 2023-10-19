@@ -76,19 +76,19 @@ class AccompanyingViewSet(viewsets.ModelViewSet):
     def list(self, request):
         if request.method == 'GET':
             unique_id = request.GET.get('unique_id', '')
-        if unique_id:
-            accompanying_visitors = Accompanying.objects.filter(unique_id=unique_id)
-            serializer = AccompanyingSerializer(accompanying_visitors, many=True)
-            return JsonResponse(serializer.data, safe=False)
-        
-        else:
-            return JsonResponse({'message': 'Accompanying Visitor not found'})
+            if unique_id:
+                accompanying_visitors = Accompanying.objects.filter(unique_id=unique_id)
+                serializer = AccompanyingSerializer(accompanying_visitors, many=True)
+                return JsonResponse(serializer.data, safe=False)
+            
+            else:
+                return JsonResponse({'message': 'Accompanying Visitor not found'})
 
-        return JsonResponse({'message': 'Visitor not found'})    
     
 
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
+
     def post(self, request):
         try:
             print(dict(request.data))
@@ -99,20 +99,22 @@ class LogoutView(APIView):
         except Exception as e:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-
-@csrf_exempt
-def is_expired(request):
-    if request.method == 'GET':
-        unique_id = request.GET.get('unique_id', '')
-        lead_visitor = LeadVisitor.objects.filter(unique_id=unique_id).first()
-        if lead_visitor:
-            if lead_visitor.valid_till.replace(tzinfo=None) < datetime.datetime.now():
-                print(f"Expired: ID {unique_id}")
-                return JsonResponse({'message': 'expired'})
+class ExpiryView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    @csrf_exempt
+    def get(self, request, *args, **kwargs):
+        if request.method == 'GET':
+            unique_id = request.GET.get('unique_id', '')
+            lead_visitor = LeadVisitor.objects.filter(unique_id=unique_id).first()
+            if lead_visitor:
+                if lead_visitor.valid_till.replace(tzinfo=None) < datetime.datetime.now():
+                    print(f"Expired: ID {unique_id}")
+                    return JsonResponse({'message': 'expired', 'expired_datetime': lead_visitor.valid_till, 'expired_time': lead_visitor.valid_till.time(), 'expired_date': lead_visitor.valid_till.date()})
+                else:
+                    print(f"Not Expired: ID {unique_id}")
+                    return JsonResponse({'message': 'not expired', 'expiry_datetime': lead_visitor.valid_till, 'expiry_time': lead_visitor.valid_till.time(), 'expiry_date': lead_visitor.valid_till.date()})
             else:
-                print(f"Not Expired: ID {unique_id}")
-                return JsonResponse({'message': 'not expired'})
+                return JsonResponse({'message': 'not found'})
         else:
-            return JsonResponse({'message': 'not found'})
-    else:
-        return JsonResponse({'message': f'{request.method} not allowed. Only GET allowed'})
+            return JsonResponse({'message': f'{request.method} not allowed. Only GET allowed'})
