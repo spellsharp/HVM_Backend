@@ -1,10 +1,20 @@
 import datetime
+from django.http import JsonResponse
 from rest_framework import serializers
 from .models import LeadVisitor, Accompanying, Receiver
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 
+class ReceiverSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Receiver
+        fields = '__all__'
+        
+    def create(self, validated_data):
+        validated_data['created_by'] = self.context['request'].user
+        return super().create(validated_data)
+    
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
     @classmethod
@@ -12,6 +22,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token = super(MyTokenObtainPairSerializer, cls).get_token(user)
         token['username'] = user.username
         return token
+    
 class LeadVisitorSerializer(serializers.ModelSerializer):
     class Meta:
         model = LeadVisitor
@@ -55,6 +66,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         user.set_password(validated_data['password'])
         user.save()
+        # TODO: Add other fields after its done
         Receiver.objects.create(username=user.username)
 
         return user
