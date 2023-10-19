@@ -100,23 +100,6 @@ class LogoutView(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-@csrf_exempt    
-def getReceivers(request):
-    if request.method == 'GET':
-        username = request.GET.get('username', '')
-        if username:
-            receivers = Receiver.objects.filter(username=username)
-            serializer = ReceiverSerializer(receivers, many=True)
-            return JsonResponse(serializer.data, safe=False)
-        
-        elif username == '':
-            receivers = Receiver.objects.all()
-            serializer = ReceiverSerializer(receivers, many=True)
-            return JsonResponse(serializer.data, safe=False)
-        
-        else:   
-            return JsonResponse({'message': 'Receiver not found'})
-
 @csrf_exempt
 def is_expired(request):
     if request.method == 'GET':
