@@ -70,7 +70,7 @@ class LeadVisitorViewSet(viewsets.ModelViewSet):
 class AccompanyingViewSet(viewsets.ModelViewSet):
     queryset = Accompanying.objects.all()
     serializer_class = AccompanyingSerializer
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     
     @csrf_exempt
     def list(self, request):
@@ -82,7 +82,9 @@ class AccompanyingViewSet(viewsets.ModelViewSet):
                 return JsonResponse(serializer.data, safe=False)
             
             else:
-                return JsonResponse({'message': 'Accompanying Visitor not found'})
+                accompanying_visitors = Accompanying.objects.all()
+                serializer = AccompanyingSerializer(accompanying_visitors, many=True)
+                return JsonResponse(serializer.data, safe=False)
 
     
 
@@ -100,7 +102,7 @@ class LogoutView(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 class ExpiryView(APIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     
     @csrf_exempt
     def get(self, request, *args, **kwargs):
