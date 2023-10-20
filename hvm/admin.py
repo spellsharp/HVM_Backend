@@ -11,9 +11,9 @@ class LeadVisitorAdmin(admin.ModelAdmin):
 
 
 class AccompanyingAdmin(admin.ModelAdmin):
-    list_display = ('full_name', 'unique_id', 'lead_visitor','contact_number')
-    list_filter = ('full_name', 'unique_id', 'lead_visitor','contact_number')
-    search_fields = ('full_name', 'unique_id', 'lead_visitor','contact_number')
+    list_display = ('full_name', 'unique_id', 'lead_visitor_id','contact_number')
+    list_filter = ('full_name', 'unique_id', 'lead_visitor_id','contact_number')
+    search_fields = ('full_name', 'unique_id', 'lead_visitor_id','contact_number')
     
 class ReceiverAdmin(admin.ModelAdmin):
     list_display = ('username', 'full_name', 'employee_id')

@@ -34,7 +34,7 @@ class LeadVisitor(models.Model):
 
 class Accompanying(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='accompanying_visitors', null=True, blank=True)
-    lead_visitor = models.ForeignKey(LeadVisitor, on_delete=models.CASCADE, null=True)
+    lead_visitor_id = models.CharField(LeadVisitor, max_length=200, null=True, blank=True)
     full_name = models.CharField(max_length=200)
     email = models.CharField(max_length=200, null=True, blank=True)
     contact_number = models.CharField(max_length=200)
