@@ -49,8 +49,8 @@ class AccompanyingSerializer(serializers.ModelSerializer):
 class RegisterSerializer(serializers.ModelSerializer):
     
     password = serializers.CharField(
-        write_only=True, required=True, validators=[validate_password])
-    password2 = serializers.CharField(write_only=True, required=True)
+        write_only=True, required=True)
+    password2 = serializers.CharField(write_only=True, validators=[validate_password])
     first_name = serializers.CharField(write_only=True, required=True)
     last_name = serializers.CharField(write_only=True, required=True)
     email = serializers.CharField(write_only=True, required=True)
@@ -60,7 +60,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('username', 'password', 'password2', 'first_name', 'last_name', 'email', 'contact_number', 'employee_id')
-
+    #This will only be used if Wreck decides to send me the password2 as well but he is adamant. But I'm have a big heart, so I'll let him do wtvr he wants.
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
             raise serializers.ValidationError(
@@ -78,7 +78,6 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         user.set_password(validated_data['password'])
         user.save()
-        # TODO: Add other fields after its done
         Receiver.objects.create(username=user.username, created_by=self.context['request'].user, full_name=user.first_name + " " + user.last_name, contact_number = validated_data['contact_number'], employee_id = validated_data['employee_id'])
 
         return user
