@@ -82,7 +82,7 @@ class AccompanyingViewSet(viewsets.ModelViewSet):
                 serializer = AccompanyingSerializer(accompanying_visitors, many=True)
                 return JsonResponse(serializer.data, safe=False)
             elif lead_visitor_id:
-                lead_visitor = LeadVisitor.objects.filter(unique=lead_visitor_id)
+                lead_visitor = LeadVisitor.objects.filter(unique_id=lead_visitor_id)
                 accompanying_visitors = Accompanying.objects.filter(lead_visitor=lead_visitor)
                 serializer = AccompanyingSerializer(accompanying_visitors, many=True)
                 return JsonResponse(serializer.data, safe=False)
