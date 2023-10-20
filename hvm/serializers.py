@@ -50,7 +50,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     
     password = serializers.CharField(
         write_only=True, required=True)
-    password2 = serializers.CharField(write_only=True, validators=[validate_password])
+    # password2 = serializers.CharField(write_only=True, validators=[validate_password], required=True)
     first_name = serializers.CharField(write_only=True, required=True)
     last_name = serializers.CharField(write_only=True, required=True)
     email = serializers.CharField(write_only=True, required=True)
@@ -59,15 +59,17 @@ class RegisterSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = User
-        fields = ('username', 'password', 'password2', 'first_name', 'last_name', 'email', 'contact_number', 'employee_id')
-    #This will only be used if Wreck decides to send me the password2 as well but he is adamant. But I'm have a big heart, so I'll let him do wtvr he wants.
+        fields = ('username', 'password', 'first_name', 'last_name', 'email', 'contact_number', 'employee_id')
+    '''
+    #This will only be used if Wreck decides to send me the password2 as well but he is adamant. But I have a big heart, so I'll let him do wtvr he wants.
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
             raise serializers.ValidationError(
                 {"password": "Password fields didn't match."})
 
         return attrs
-
+    '''
+    
     def create(self, validated_data):
         user = User.objects.create(
             username=validated_data['username'],
