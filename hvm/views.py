@@ -19,7 +19,7 @@ class MyObtainTokenPairView(TokenObtainPairView):
     
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     serializer_class = RegisterSerializer
 
 
@@ -42,13 +42,13 @@ class ReceiverViewSet(viewsets.ModelViewSet):
                 serializer = ReceiverSerializer(receivers, many=True)
                 return JsonResponse(serializer.data, safe=False)
             
-            else:   
+            else:
                 return JsonResponse({'message': 'Receiver not found'})
 
 class LeadVisitorViewSet(viewsets.ModelViewSet):
     queryset = LeadVisitor.objects.all()
     serializer_class = LeadVisitorSerializer
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     
     @csrf_exempt
     def list(self, request):
