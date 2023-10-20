@@ -21,6 +21,9 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def get_token(cls, user):
         token = super(MyTokenObtainPairSerializer, cls).get_token(user)
         token['username'] = user.username
+        print("===============================")
+        print(token)
+        print("===============================")
         return token
     
 class LeadVisitorSerializer(serializers.ModelSerializer):
@@ -48,9 +51,15 @@ class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
         write_only=True, required=True, validators=[validate_password])
     password2 = serializers.CharField(write_only=True, required=True)
+    first_name = serializers.CharField(write_only=True, required=True)
+    last_name = serializers.CharField(write_only=True, required=True)
+    email = serializers.CharField(write_only=True, required=True)
+    contact_number = serializers.CharField(write_only=True, required=True)
+    employee_id = serializers.CharField(write_only=True)
+    
     class Meta:
         model = User
-        fields = ('username', 'password', 'password2')
+        fields = ('username', 'password', 'password2', 'first_name', 'last_name', 'email', 'contact_number', 'employee_id')
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
@@ -61,12 +70,15 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user = User.objects.create(
-            username=validated_data['username']
+            username=validated_data['username'],
+            first_name=validated_data['first_name'],
+            last_name=validated_data['last_name'],
+            email=validated_data['email']
         )
 
         user.set_password(validated_data['password'])
         user.save()
         # TODO: Add other fields after its done
-        Receiver.objects.create(username=user.username)
+        Receiver.objects.create(username=user.username, created_by=self.context['request'].user, full_name=user.first_name + " " + user.last_name, contact_number = validated_data['contact_number'], employee_id = validated_data['employee_id'])
 
         return user

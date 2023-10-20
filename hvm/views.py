@@ -26,7 +26,7 @@ class RegisterView(generics.CreateAPIView):
 class ReceiverViewSet(viewsets.ModelViewSet):
     queryset = Receiver.objects.all()
     serializer_class = ReceiverSerializer
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
     
     @csrf_exempt    
     def list(self, request):
