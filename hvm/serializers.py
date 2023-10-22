@@ -6,6 +6,11 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = '__all__'
+
 class ReceiverSerializer(serializers.ModelSerializer):
     class Meta:
         model = Receiver
@@ -38,12 +43,17 @@ class LeadVisitorSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
         
 class AccompanyingSerializer(serializers.ModelSerializer):
+    lead_visitor_id = serializers.CharField(required=True)
     class Meta:
         model = Accompanying
         fields = '__all__'
     def create(self, validated_data):
         validated_data['created_by'] = self.context['request'].user
         return super().create(validated_data)
+    
+class AccompanyingListSerializer(serializers.ListSerializer):
+    child = AccompanyingSerializer()
+    
 class RegisterSerializer(serializers.ModelSerializer):
     
     password = serializers.CharField(
@@ -64,7 +74,6 @@ class RegisterSerializer(serializers.ModelSerializer):
         if attrs['password'] != attrs['password2']:
             raise serializers.ValidationError(
                 {"password": "Password fields didn't match."})
-
         return attrs
     '''
     
@@ -79,5 +88,4 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         Receiver.objects.create(username=user.username, created_by=self.context['request'].user, full_name=user.first_name + " " + user.last_name, contact_number = validated_data['contact_number'], employee_id = validated_data['employee_id'])
-
         return user

@@ -1,14 +1,13 @@
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseNotFound
 from django.views.decorators.csrf import csrf_exempt
 from .models import LeadVisitor, Accompanying, Receiver
 import datetime
 from rest_framework import viewsets, status, generics
-from .serializers import LeadVisitorSerializer, AccompanyingSerializer
+from .serializers import LeadVisitorSerializer, AccompanyingSerializer, AccompanyingListSerializer, ReceiverSerializer, RegisterSerializer, UserSerializer, MyTokenObtainPairSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import AllowAny
-from .serializers import MyTokenObtainPairSerializer, RegisterSerializer, ReceiverSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.contrib.auth.models import User
@@ -21,6 +20,10 @@ class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     # permission_classes = [IsAuthenticated]
     serializer_class = RegisterSerializer
+    def get(self, request, *args, **kwargs):
+        users = User.objects.all()
+        serializer = UserSerializer(users, many=True)
+        return Response(serializer.data)
 
 
 class ReceiverViewSet(viewsets.ModelViewSet):
@@ -69,7 +72,7 @@ class LeadVisitorViewSet(viewsets.ModelViewSet):
             return JsonResponse(serializer.data, safe=False)
 class AccompanyingViewSet(viewsets.ModelViewSet):
     queryset = Accompanying.objects.all()
-    serializer_class = AccompanyingSerializer
+    serializer_class = AccompanyingListSerializer
     # permission_classes = [IsAuthenticated]
     
     @csrf_exempt

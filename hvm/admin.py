@@ -5,11 +5,10 @@ from django.contrib import admin
 from .models import LeadVisitor, Accompanying, Receiver
 
 class LeadVisitorAdmin(admin.ModelAdmin):
-    list_display = ('full_name', 'unique_id', 'company_name', 'address', 'contact_number', 'visiting_date', 'visiting_time', 'image')
-    list_filter = ('full_name', 'unique_id', 'company_name', 'address', 'contact_number', 'visiting_date', 'visiting_time', 'image')
-    search_fields = ('full_name', 'unique_id', 'company_name', 'address', 'contact_number', 'visiting_date', 'visiting_time', 'image')
-
-
+    list_display = ('full_name', 'unique_id', 'company_name', 'address', 'contact_number', 'visiting_date', 'visiting_time')
+    list_filter = ('full_name', 'unique_id', 'company_name', 'address', 'contact_number', 'visiting_date', 'visiting_time')
+    search_fields = ('full_name', 'unique_id', 'company_name', 'address', 'contact_number', 'visiting_date', 'visiting_time')
+    
 class AccompanyingAdmin(admin.ModelAdmin):
     list_display = ('full_name', 'unique_id', 'lead_visitor_id','contact_number')
     list_filter = ('full_name', 'unique_id', 'lead_visitor_id','contact_number')
