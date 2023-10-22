@@ -19,6 +19,8 @@ class LeadVisitor(models.Model):
     email = models.CharField(max_length=200, null=True, blank=True)
     contact_number = models.CharField(max_length=200)
     image = models.CharField(max_length=25000000, null=True, blank=True)
+    official_documentation = models.FileField(upload_to='upload/', null=True, blank=True)
+    visitee = models.CharField(max_length=200, null=True, blank=True)
     visiting_date = models.DateField("Visiting Date", null=True, blank=True)
     visiting_time = models.TimeField("Visiting Time", null=True, blank=True)    
     unique_id = models.CharField(max_length=36, default=uuid.uuid4)
