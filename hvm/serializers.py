@@ -30,7 +30,9 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         print(token)
         print("===============================")
         return token
-    
+
+
+
 class LeadVisitorSerializer(serializers.ModelSerializer):
     class Meta:
         model = LeadVisitor
@@ -53,7 +55,10 @@ class AccompanyingSerializer(serializers.ModelSerializer):
     
 class AccompanyingListSerializer(serializers.ListSerializer):
     child = AccompanyingSerializer()
-    
+
+class AllVisitorSerializer(serializers.Serializer):
+    lead_visitor = LeadVisitorSerializer(many=True)
+    accompanying = AccompanyingSerializer(many=True)
 class RegisterSerializer(serializers.ModelSerializer):
     
     password = serializers.CharField(

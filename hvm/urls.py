@@ -1,12 +1,13 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import LeadVisitorViewSet, AccompanyingViewSet, ReceiverViewSet, ExpiryView, MyObtainTokenPairView, LogoutView, RegisterView
+from .views import LeadVisitorViewSet, AccompanyingViewSet, ReceiverViewSet, ExpiryView, MyObtainTokenPairView, LogoutView, RegisterView, AllVisitorView
 from rest_framework_simplejwt.views import TokenRefreshView
 
 router = DefaultRouter()
 router.register(r'leadvisitor', LeadVisitorViewSet)
 router.register(r'accompanying', AccompanyingViewSet)
 router.register(r'receivers', ReceiverViewSet)
+router.register(r'visitors', AllVisitorView)
 
 
 urlpatterns = [

@@ -3,7 +3,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import LeadVisitor, Accompanying, Receiver
 import datetime
 from rest_framework import viewsets, status, generics
-from .serializers import LeadVisitorSerializer, AccompanyingSerializer, AccompanyingListSerializer, ReceiverSerializer, RegisterSerializer, UserSerializer, MyTokenObtainPairSerializer
+from .serializers import AllVisitorSerializer, LeadVisitorSerializer, AccompanyingSerializer, AccompanyingListSerializer, ReceiverSerializer, RegisterSerializer, UserSerializer, MyTokenObtainPairSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -25,7 +25,28 @@ class RegisterView(generics.CreateAPIView):
         serializer = UserSerializer(users, many=True)
         return Response(serializer.data)
 
+class AllVisitorView(viewsets.ModelViewSet):
+    queryset = LeadVisitor.objects.all()
+    # permission_classes = [IsAuthenticated]
+    def list(self, request):
+        if request.method == 'GET':
+            unique_id = request.GET.get('unique_id', '')
+            if unique_id:
+                lead_visitors = LeadVisitor.objects.filter(unique_id=unique_id)
+                accompanying = Accompanying.objects.filter(lead_visitor_id=unique_id)
+            else: 
+                lead_visitors = LeadVisitor.objects.all()
+                accompanying = Accompanying.objects.all()
+            
+            combined_data = {
+                'lead_visitor': lead_visitors,
+                'accompanying': accompanying
+            }
+        
+        serializer = AllVisitorSerializer(combined_data)
+        return Response(serializer.data)
 
+    
 class ReceiverViewSet(viewsets.ModelViewSet):
     queryset = Receiver.objects.all()
     serializer_class = ReceiverSerializer
