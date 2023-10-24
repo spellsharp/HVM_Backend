@@ -27,6 +27,7 @@ class RegisterView(generics.CreateAPIView):
 
 class AllVisitorView(viewsets.ModelViewSet):
     queryset = LeadVisitor.objects.all()
+    serializer_class = AllVisitorSerializer
     # permission_classes = [IsAuthenticated]
     def list(self, request):
         if request.method == 'GET':

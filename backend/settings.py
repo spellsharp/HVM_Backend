@@ -72,10 +72,6 @@ CORS_ALLOW_METHODS = [
     "OPTIONS",
 ]
 
-CORS_ALLOW_HEADERS = [
-    "Content-Type",
-]
-
 CORS_ALLOW_CREDENTIALS = True
 
 MIDDLEWARE = [
