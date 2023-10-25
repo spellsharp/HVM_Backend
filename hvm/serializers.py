@@ -59,6 +59,7 @@ class AccompanyingListSerializer(serializers.ListSerializer):
 class AllVisitorSerializer(serializers.Serializer):
     lead_visitor = LeadVisitorSerializer(many=True)
     accompanying = AccompanyingSerializer(many=True)
+    message = serializers.CharField(max_length=200)
 class RegisterSerializer(serializers.ModelSerializer):
     
     password = serializers.CharField(

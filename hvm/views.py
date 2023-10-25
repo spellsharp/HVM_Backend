@@ -32,17 +32,36 @@ class AllVisitorView(viewsets.ModelViewSet):
     queryset = LeadVisitor.objects.all()
     serializer_class = AllVisitorSerializer
     permission_classes = [IsAuthenticated]
+    
     def list(self, request):
         if request.method == 'GET':
             unique_id = request.GET.get('unique_id', '')
+            date = request.GET.get('date', '')
+            from_date, to_date = request.GET.get('from_date', ''), request.GET.get('to_date', '')
+            status = request.GET.get('status', '')
+            message = "Query parameters found. Returning filtered visitors."
             if unique_id:
                 lead_visitors = LeadVisitor.objects.filter(unique_id=unique_id)
                 accompanying = Accompanying.objects.filter(lead_visitor_id=unique_id)
+                if lead_visitors.count() == 0:
+                    message = "NOT_FOUND: No visitor found with the given unique_id."
+            elif date:
+                lead_visitors = LeadVisitor.objects.filter(visiting_date=date)
+                accompanying = Accompanying.objects.filter(lead_visitor_id__in=lead_visitors.values_list('unique_id', flat=True))
+                if lead_visitors.count() == 0:
+                    message = "NOT_FOUND: No visitor found with the given date."
+            elif from_date and to_date:
+                lead_visitors = LeadVisitor.objects.filter(visiting_date__range=[from_date, to_date])
+                accompanying = Accompanying.objects.filter(lead_visitor_id__in=lead_visitors.values_list('unique_id', flat=True))
+                if lead_visitors.count() == 0:
+                    message = "NOT_FOUND: No visitor found with the given date range."
             else: 
+                message = "No query parameters provided. Returning all visitors."
                 lead_visitors = LeadVisitor.objects.all()
                 accompanying = Accompanying.objects.all()
             
             combined_data = {
+                'message': message,
                 'lead_visitor': lead_visitors,
                 'accompanying': accompanying
             }
