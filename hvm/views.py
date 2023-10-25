@@ -92,6 +92,7 @@ class LeadVisitorViewSet(viewsets.ModelViewSet):
                 lead_visitors = LeadVisitor.objects.all()
             serializer = LeadVisitorSerializer(lead_visitors, many=True)
             return JsonResponse(serializer.data, safe=False)
+        
 class AccompanyingViewSet(viewsets.ModelViewSet):
     queryset = Accompanying.objects.all()
     serializer_class = AccompanyingListSerializer
