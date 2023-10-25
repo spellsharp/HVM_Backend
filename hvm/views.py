@@ -163,6 +163,7 @@ class ExpiryView(APIView):
             if unique_id == '':
                 return JsonResponse({'message': 'unique_id not provided'})
             lead_visitor = LeadVisitor.objects.filter(unique_id=unique_id).first()
+            print(lead_visitor.valid_till)
             if lead_visitor:
                 if lead_visitor.valid_till.replace(tzinfo=None) < datetime.datetime.now():
                     print(f"Expired: ID {unique_id} - expired_datetime: {lead_visitor.valid_till}")
