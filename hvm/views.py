@@ -18,7 +18,7 @@ class MyObtainTokenPairView(TokenObtainPairView):
     
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     serializer_class = RegisterSerializer
     def get(self, request, *args, **kwargs):
         users = User.objects.all()
@@ -28,7 +28,7 @@ class RegisterView(generics.CreateAPIView):
 class AllVisitorView(viewsets.ModelViewSet):
     queryset = LeadVisitor.objects.all()
     serializer_class = AllVisitorSerializer
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     def list(self, request):
         if request.method == 'GET':
             unique_id = request.GET.get('unique_id', '')
@@ -51,7 +51,7 @@ class AllVisitorView(viewsets.ModelViewSet):
 class ReceiverViewSet(viewsets.ModelViewSet):
     queryset = Receiver.objects.all()
     serializer_class = ReceiverSerializer
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     
     @csrf_exempt    
     def list(self, request):
@@ -73,7 +73,7 @@ class ReceiverViewSet(viewsets.ModelViewSet):
 class LeadVisitorViewSet(viewsets.ModelViewSet):
     queryset = LeadVisitor.objects.all()
     serializer_class = LeadVisitorSerializer
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     
     @csrf_exempt
     def list(self, request):
@@ -96,7 +96,7 @@ class LeadVisitorViewSet(viewsets.ModelViewSet):
 class AccompanyingViewSet(viewsets.ModelViewSet):
     queryset = Accompanying.objects.all()
     serializer_class = AccompanyingListSerializer
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     
     @csrf_exempt
     def list(self, request):
@@ -132,7 +132,7 @@ class LogoutView(APIView):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 class ExpiryView(APIView):
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     
     @csrf_exempt
     def get(self, request, *args, **kwargs):
