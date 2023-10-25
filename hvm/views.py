@@ -12,6 +12,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 
+
+def index(request):
+    return HttpResponse(f"<p>Hey! I see you're trying to access the API or the admin panel. I suggest you visit the <a href='https://aims.pythonanywhere.com/admin'>/admin</a> or <a href='https://aims.pythonanywhere.com/api'>/api</a> instead.<p>")
 class MyObtainTokenPairView(TokenObtainPairView):
     permission_classes = (AllowAny,)
     serializer_class = MyTokenObtainPairSerializer
