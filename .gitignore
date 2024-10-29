@@ -3,3 +3,5 @@ hvm/__pycache__/
 db.sqlite3
 hvm/migrations/
 test
+.env
+venv
